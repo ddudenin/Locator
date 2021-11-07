@@ -7,59 +7,154 @@
 
 import UIKit
 import MapKit
+import RealmSwift
 
 class MapViewController: UIViewController {
-
+    
     @IBOutlet weak var mapView: MKMapView!
     
     private var locationManager = CLLocationManager()
-
+    private var isLocationUpdate: Bool = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
+        configureLocationManager()
     }
     
-    @IBAction func currentLocationButtonHandler(_ sender: Any) {
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.requestWhenInUseAuthorization()
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.requestAlwaysAuthorization()
-            locationManager.startUpdatingLocation()
-        }
+    @IBAction private func startRecordingButtonHandler(_ sender: Any) {
+        self.mapView.removeAnnotations(self.mapView.annotations)
+        locationManager.startUpdatingLocation()
+        isLocationUpdate = true
     }
-}
-
-extension MapViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {
-            print("Failed while getting last location")
+    
+    @IBAction private func stopRecordingButtonHandler(_ sender: Any) {
+        guard isLocationUpdate else { return }
+        
+        locationManager.stopUpdatingLocation()
+        saveRouteToRealm()
+        isLocationUpdate = false
+    }
+    
+    @IBAction private func showLastRouteButton(_ sender: Any) {
+        guard !isLocationUpdate else {
+            let alert = UIAlertController(title: "Ошибка",
+                                          message: "Необходимо завершить отслеживание",
+                                          preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK",
+                                          style: .default,
+                                          handler: { _ in
+                self.stopRecordingButtonHandler(self)
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Отмена",
+                                          style: .cancel,
+                                          handler: nil))
+            
+            self.present(alert,
+                         animated: true,
+                         completion: nil)
+            
             return
         }
         
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: { location, error in
-            //print(location.debugDescription)
-        })
+        let realmPointsData: Results<MapPoint>? = RealmManager.shared?.getObjects()
         
+        guard let points = realmPointsData,
+              !points.isEmpty
+        else { return }
+        
+        /*points.forEach {
+         let pointAnnotation = MKPointAnnotation()
+         pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: $0.latitude,
+         longitude: $0.longitude)
+         self.mapView.addAnnotation(pointAnnotation)
+         }
+         
+         */
+        
+        // NYC
+        let p1 = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 40.71, longitude: -74))
+        
+        // Boston
+        let p2 = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 42.36, longitude: -71.05))
+        
+        let request = MKDirections.Request()
+        request.source = MKMapItem(placemark: p1)
+        request.destination = MKMapItem(placemark: p2)
+        request.transportType = .automobile
+        
+        let directions = MKDirections(request: request)
+        directions.calculate { response, error in
+            guard let route = response?.routes.first else { return }
+            self.mapView.addAnnotations([p1, p2])
+            self.mapView.addOverlay(route.polyline)
+            self.mapView.setVisibleMapRect(
+                route.polyline.boundingMapRect,
+                edgePadding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20),
+                animated: true)
+        }
+        
+        self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+    }
+    
+    private func configureLocationManager() {
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.requestWhenInUseAuthorization()
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.requestAlwaysAuthorization()
+            self.locationManager.allowsBackgroundLocationUpdates = true
+            self.locationManager.pausesLocationUpdatesAutomatically = false
+        }
+    }
+    
+    private func saveRouteToRealm() {
+        try? RealmManager.shared?.deleteAll()
+        var points : [MapPoint] = []
+        let pathPointsCount = self.mapView.annotations.count
+        
+        for index in 0..<pathPointsCount {
+            let coordinate = self.mapView.annotations[index].coordinate
+            let point = MapPoint()
+            point.id = index
+            point.longitude = coordinate.longitude
+            point.latitude = coordinate.latitude
+            points.append(point)
+        }
+        
+        try? RealmManager.shared?.add(objects: points)
+    }
+    
+    private func setMapRegion(coordinate: CLLocationCoordinate2D) {
         let deltaDegrees: CLLocationDegrees = 0.01
-        let coordinates = location.coordinate
         
-        let center = CLLocationCoordinate2D(latitude: coordinates.latitude,
-                                            longitude: coordinates.longitude)
+        let center = CLLocationCoordinate2D(latitude: coordinate.latitude,
+                                            longitude: coordinate.longitude)
         let region = MKCoordinateRegion(center: center,
                                         span: MKCoordinateSpan(latitudeDelta: deltaDegrees,
                                                                longitudeDelta: deltaDegrees))
         
         self.mapView.setRegion(region, animated: true)
+    }
+}
+
+extension MapViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard isLocationUpdate else { return }
         
-        if !self.mapView.annotations.isEmpty {
-            let annotation = self.mapView.annotations[0]
-            self.mapView.removeAnnotation(annotation)
+        guard let location = locations.last else {
+            print("Failed while getting last location")
+            return
         }
         
+        let coordinate = location.coordinate
+        self.setMapRegion(coordinate: coordinate)
+        
         let pointAnnotation = MKPointAnnotation()
-        pointAnnotation.coordinate = coordinates
+        pointAnnotation.coordinate = coordinate
         pointAnnotation.title = "position \(self.mapView.annotations.count)"
         self.mapView.addAnnotation(pointAnnotation)
     }
