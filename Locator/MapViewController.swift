@@ -16,10 +16,12 @@ class MapViewController: UIViewController {
     
     // MARK: - Private properties
     private var locationManager = CLLocationManager()
+    
     private var route: GMSPolyline?
     private var routePath: GMSMutablePath?
     
-    private var isLocationUpdate: Bool = false
+    private var isLocationUpdating: Bool = false
+    private let mapZoom: Float = 17
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -43,11 +45,16 @@ class MapViewController: UIViewController {
     }
     
     private func configureMap() {
-        let coordinateMoscow = CLLocationCoordinate2D(latitude: 55.753215,
-                                                      longitude: 37.622504)
-        let camera = GMSCameraPosition.camera(withTarget: coordinateMoscow, zoom: 17)
+        let coordinate: CLLocationCoordinate2D = self.locationManager
+            .location?
+            .coordinate ??
+        CLLocationCoordinate2D(latitude: 55.753215,
+                               longitude: 37.622504)
+        
+        let camera = GMSCameraPosition.camera(withTarget: coordinate,
+                                              zoom: self.mapZoom)
         self.mapView.camera = camera
-        self.mapView.animate(toLocation: coordinateMoscow)
+        self.mapView.animate(toLocation: coordinate)
     }
     
     private func prepareNewRoute() {
@@ -56,7 +63,7 @@ class MapViewController: UIViewController {
         self.route?.strokeColor = .blue
         self.route?.strokeWidth = CGFloat(5.0)
         self.routePath = GMSMutablePath()
-        self.route?.map = mapView
+        self.route?.map = self.mapView
     }
     
     private func saveRouteToRealm() {
@@ -78,6 +85,26 @@ class MapViewController: UIViewController {
         }
         
         try? RealmManager.shared?.add(objects: points)
+    }
+    
+    private func loadRouteFromRealm() {
+        let realmPointsData: Results<MapPoint>? = RealmManager.shared?.getObjects()
+        
+        guard let points = realmPointsData,
+              !points.isEmpty
+        else { return }
+        
+        prepareNewRoute()
+        
+        points.forEach {
+            let coordinate = CLLocationCoordinate2D(latitude: $0.latitude,
+                                                    longitude: $0.longitude)
+            self.routePath?.add(coordinate)
+            addMarker(coordinate: coordinate)
+        }
+        
+        self.route?.path = self.routePath
+        
     }
     
     private func addMarker(coordinate: CLLocationCoordinate2D) {
@@ -107,45 +134,37 @@ class MapViewController: UIViewController {
     
     // MARK: - Actions
     @IBAction private func startRecordingButtonHandler(_ sender: Any) {
-        guard !isLocationUpdate else { return }
+        guard !self.isLocationUpdating else { return }
+        
+        self.locationManager.startUpdatingLocation()
         prepareNewRoute()
-        isLocationUpdate = true
-        locationManager.startUpdatingLocation()
+        self.isLocationUpdating = true
     }
     
     @IBAction private func stopRecordingButtonHandler(_ sender: Any) {
-        guard isLocationUpdate else { return }
+        guard self.isLocationUpdating else { return }
         
-        locationManager.stopUpdatingLocation()
+        self.locationManager.stopUpdatingLocation()
         saveRouteToRealm()
-        isLocationUpdate = false
+        self.isLocationUpdating = false
     }
     
     @IBAction private func showLastRouteButton(_ sender: Any) {
-        guard !isLocationUpdate else {
+        guard !self.isLocationUpdating else {
             showAlertController()
             return
         }
         
-        let realmPointsData: Results<MapPoint>? = RealmManager.shared?.getObjects()
+        loadRouteFromRealm()
         
-        guard let points = realmPointsData,
-              !points.isEmpty
-        else { return }
-        
-        prepareNewRoute()
-        
-        points.forEach {
-            let coordinate = CLLocationCoordinate2D(latitude: $0.latitude,
-                                                    longitude: $0.longitude)
-            routePath?.add(coordinate)
-            addMarker(coordinate: coordinate)
+        guard let routePath = self.routePath else {
+            print("Failed to get route path from Realm")
+            return
         }
         
-        self.route?.path = routePath
-        
-        let bounds = GMSCoordinateBounds(path: routePath ?? GMSMutablePath())
-        self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: CGFloat(17)))
+        let bounds = GMSCoordinateBounds(path: routePath)
+        self.mapView.animate(with: GMSCameraUpdate.fit(bounds,
+                                                       withPadding: CGFloat(self.mapZoom)))
     }
     
 }
@@ -153,7 +172,7 @@ class MapViewController: UIViewController {
 // MARK: - MapViewController + CLLocationManagerDelegate
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard isLocationUpdate else { return }
+        guard self.isLocationUpdating else { return }
         
         guard let location = locations.last else {
             print("Failed while getting last location")
@@ -165,7 +184,7 @@ extension MapViewController: CLLocationManagerDelegate {
         self.mapView.animate(toLocation: coordinate)
         
         self.routePath?.add(coordinate)
-        self.route?.path = routePath
+        self.route?.path = self.routePath
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
