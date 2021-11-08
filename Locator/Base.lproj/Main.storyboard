@@ -32,17 +32,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yGb-Bi-pVr">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zcT-Ps-oe9" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                            </mapView>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nML-un-dBq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="yGb-Bi-pVr" firstAttribute="leading" secondItem="nML-un-dBq" secondAttribute="leading" id="2Jp-gy-QzF"/>
-                            <constraint firstItem="yGb-Bi-pVr" firstAttribute="bottom" secondItem="nML-un-dBq" secondAttribute="bottom" id="cbe-6N-AP7"/>
-                            <constraint firstItem="yGb-Bi-pVr" firstAttribute="top" secondItem="nML-un-dBq" secondAttribute="top" id="lmU-pH-TVw"/>
-                            <constraint firstItem="yGb-Bi-pVr" firstAttribute="trailing" secondItem="nML-un-dBq" secondAttribute="trailing" id="mZ9-cI-1yK"/>
+                            <constraint firstItem="zcT-Ps-oe9" firstAttribute="leading" secondItem="nML-un-dBq" secondAttribute="leading" id="0Wj-Ob-OLH"/>
+                            <constraint firstItem="nML-un-dBq" firstAttribute="trailing" secondItem="zcT-Ps-oe9" secondAttribute="trailing" id="ey3-yB-AW8"/>
+                            <constraint firstItem="nML-un-dBq" firstAttribute="bottom" secondItem="zcT-Ps-oe9" secondAttribute="bottom" id="ggY-bm-wqk"/>
+                            <constraint firstItem="zcT-Ps-oe9" firstAttribute="top" secondItem="nML-un-dBq" secondAttribute="top" id="uR1-LX-0y0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Locator" id="tmx-Gc-hoZ">
@@ -65,7 +66,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="mapView" destination="yGb-Bi-pVr" id="Sbl-AD-CK1"/>
+                        <outlet property="mapView" destination="zcT-Ps-oe9" id="MZc-bH-bGL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Po5-VT-EBV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

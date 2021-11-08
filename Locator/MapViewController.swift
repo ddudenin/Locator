@@ -6,27 +6,111 @@
 //
 
 import UIKit
-import MapKit
+import GoogleMaps
 import RealmSwift
 
 class MapViewController: UIViewController {
     
-    @IBOutlet weak var mapView: MKMapView!
+    // MARK: - Subviews
+    @IBOutlet weak var mapView: GMSMapView!
     
+    // MARK: - Private properties
     private var locationManager = CLLocationManager()
+    private var route: GMSPolyline?
+    private var routePath: GMSMutablePath?
+    
     private var isLocationUpdate: Bool = false
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
         configureLocationManager()
+        configureMap()
     }
     
+    // MARK: - Private methods
+    private func configureLocationManager() {
+        if CLLocationManager.locationServicesEnabled() {
+            self.locationManager.requestWhenInUseAuthorization()
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            self.locationManager.requestAlwaysAuthorization()
+            self.locationManager.allowsBackgroundLocationUpdates = true
+            self.locationManager.pausesLocationUpdatesAutomatically = false
+        }
+    }
+    
+    private func configureMap() {
+        let coordinateMoscow = CLLocationCoordinate2D(latitude: 55.753215,
+                                                      longitude: 37.622504)
+        let camera = GMSCameraPosition.camera(withTarget: coordinateMoscow, zoom: 17)
+        self.mapView.camera = camera
+        self.mapView.animate(toLocation: coordinateMoscow)
+    }
+    
+    private func prepareNewRoute() {
+        self.route?.map = nil
+        self.route = GMSPolyline()
+        self.route?.strokeColor = .blue
+        self.route?.strokeWidth = CGFloat(5.0)
+        self.routePath = GMSMutablePath()
+        self.route?.map = mapView
+    }
+    
+    private func saveRouteToRealm() {
+        guard let routePath = routePath else {
+            print("Failed to get route path")
+            return
+        }
+        
+        try? RealmManager.shared?.deleteAll()
+        var points : [MapPoint] = []
+        
+        for index in 0..<routePath.count() {
+            let coordinate = routePath.coordinate(at: index)
+            let point = MapPoint()
+            point.id = Int(index)
+            point.latitude = coordinate.latitude
+            point.longitude = coordinate.longitude
+            points.append(point)
+        }
+        
+        try? RealmManager.shared?.add(objects: points)
+    }
+    
+    private func addMarker(coordinate: CLLocationCoordinate2D) {
+        let marker = GMSMarker(position: coordinate)
+        marker.map = self.mapView
+    }
+    
+    private func showAlertController() {
+        let alert = UIAlertController(title: "Ошибка",
+                                      message: "Необходимо завершить отслеживание",
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK",
+                                      style: .default,
+                                      handler: { _ in
+            self.stopRecordingButtonHandler(self)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Отмена",
+                                      style: .cancel,
+                                      handler: nil))
+        
+        self.present(alert,
+                     animated: true,
+                     completion: nil)
+    }
+    
+    // MARK: - Actions
     @IBAction private func startRecordingButtonHandler(_ sender: Any) {
-        self.mapView.removeAnnotations(self.mapView.annotations)
-        locationManager.startUpdatingLocation()
+        guard !isLocationUpdate else { return }
+        prepareNewRoute()
         isLocationUpdate = true
+        locationManager.startUpdatingLocation()
     }
     
     @IBAction private func stopRecordingButtonHandler(_ sender: Any) {
@@ -39,24 +123,7 @@ class MapViewController: UIViewController {
     
     @IBAction private func showLastRouteButton(_ sender: Any) {
         guard !isLocationUpdate else {
-            let alert = UIAlertController(title: "Ошибка",
-                                          message: "Необходимо завершить отслеживание",
-                                          preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "OK",
-                                          style: .default,
-                                          handler: { _ in
-                self.stopRecordingButtonHandler(self)
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Отмена",
-                                          style: .cancel,
-                                          handler: nil))
-            
-            self.present(alert,
-                         animated: true,
-                         completion: nil)
-            
+            showAlertController()
             return
         }
         
@@ -66,57 +133,24 @@ class MapViewController: UIViewController {
               !points.isEmpty
         else { return }
         
+        prepareNewRoute()
+        
         points.forEach {
-            let pointAnnotation = MKPointAnnotation()
-            pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: $0.latitude,
-                                                                longitude: $0.longitude)
-            self.mapView.addAnnotation(pointAnnotation)
+            let coordinate = CLLocationCoordinate2D(latitude: $0.latitude,
+                                                    longitude: $0.longitude)
+            routePath?.add(coordinate)
+            addMarker(coordinate: coordinate)
         }
         
-        self.mapView.showAnnotations(self.mapView.annotations, animated: true)
+        self.route?.path = routePath
+        
+        let bounds = GMSCoordinateBounds(path: routePath ?? GMSMutablePath())
+        self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: CGFloat(17)))
     }
     
-    private func configureLocationManager() {
-        if CLLocationManager.locationServicesEnabled() {
-            self.locationManager.requestWhenInUseAuthorization()
-            self.locationManager.delegate = self
-            self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            self.locationManager.requestAlwaysAuthorization()
-            self.locationManager.allowsBackgroundLocationUpdates = true
-            self.locationManager.pausesLocationUpdatesAutomatically = false
-        }
-    }
-    
-    private func saveRouteToRealm() {
-        try? RealmManager.shared?.deleteAll()
-        var points : [MapPoint] = []
-        let pathPointsCount = self.mapView.annotations.count
-        
-        for index in 0..<pathPointsCount {
-            let coordinate = self.mapView.annotations[index].coordinate
-            let point = MapPoint()
-            point.id = index
-            point.longitude = coordinate.longitude
-            point.latitude = coordinate.latitude
-            points.append(point)
-        }
-        
-        try? RealmManager.shared?.add(objects: points)
-    }
-    
-    private func setMapRegion(coordinate: CLLocationCoordinate2D) {
-        let deltaDegrees: CLLocationDegrees = 0.01
-        
-        let center = CLLocationCoordinate2D(latitude: coordinate.latitude,
-                                            longitude: coordinate.longitude)
-        let region = MKCoordinateRegion(center: center,
-                                        span: MKCoordinateSpan(latitudeDelta: deltaDegrees,
-                                                               longitudeDelta: deltaDegrees))
-        
-        self.mapView.setRegion(region, animated: true)
-    }
 }
 
+// MARK: - MapViewController + CLLocationManagerDelegate
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard isLocationUpdate else { return }
@@ -127,12 +161,11 @@ extension MapViewController: CLLocationManagerDelegate {
         }
         
         let coordinate = location.coordinate
-        self.setMapRegion(coordinate: coordinate)
+        addMarker(coordinate: coordinate)
+        self.mapView.animate(toLocation: coordinate)
         
-        let pointAnnotation = MKPointAnnotation()
-        pointAnnotation.coordinate = coordinate
-        pointAnnotation.title = "position \(self.mapView.annotations.count)"
-        self.mapView.addAnnotation(pointAnnotation)
+        self.routePath?.add(coordinate)
+        self.route?.path = routePath
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

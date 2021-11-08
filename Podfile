@@ -6,5 +6,6 @@ target 'Locator' do
   use_frameworks!
 
   # Pods for Locator
+  pod 'GoogleMaps', '~> 5.2'
   pod 'RealmSwift', '~> 10.19'
 end
