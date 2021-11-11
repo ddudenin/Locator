@@ -6,53 +6,68 @@
 //
 
 import UIKit
+import RealmSwift
 
 class SignUpViewController: UIViewController {
     
-    //let userRepository = UserRepository()
-    
-    @IBOutlet weak var loginTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
+    @IBOutlet private weak var loginTextField: UITextField!
+    @IBOutlet private weak var passwordTextField: UITextField!
+        
     var onLogin: (() -> Void)?
     
-    @IBAction func SignUpButtonHandler(_ sender: Any) {
-        let login = loginTextField.text ?? ""
-        let password = passwordTextField.text ?? ""
-        let error = checkTextFields()
-        /*let repeatLogin = try? userRepository.searchUser(login: login)
-         if error == nil && ((repeatLogin?.isEmpty) == true) {
-         userRepository.saveUserData(login: login, password: password)
-         onLogin?()
-         }else{*/
-        let alert = UIAlertController(title: "Error", message: "Аккаунт с таким именем уже существует", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default) { _ in
+    @IBAction private func SignUpButtonHandler(_ sender: Any) {
+        guard
+            let login = loginTextField.text,
+            let password = passwordTextField.text
+        else {
+            showAlertController(message: "Не удалось прочитать данные пользователя")
+            return
         }
-        alert.addAction(action)
-        present(alert, animated: true)
-        //}
+        
+        guard
+            !login.isEmpty,
+            !password.isEmpty
+        else {
+            showAlertController(message: "Введены не все данные")
+            return
+        }
+        
+        let users: Results<User>? = RealmManager
+            .shared?
+            .getObjects()
+            .filter("login = %@", login)
+        
+        guard
+            let logins = users,
+            logins.isEmpty
+        else {
+            showAlertController(message: "Пользователь с таким именем уже зарегистрирован")
+            return
+        }
+        
+        do {
+            let newUser = User()
+            newUser.login = login
+            newUser.password = password
+            
+            try RealmManager.shared?.add(object: newUser)
+        } catch {
+            print(error.localizedDescription)
+            return
+        }
+        
+        UserDefaults.standard.set(true, forKey: "isLogin")
+
+        onLogin?()
     }
 
-    func checkTextFields() -> String? {
-        if loginTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-            return "Заполните все поля."
-        }else{
-            return nil
-        }
-    }
-    
-    @objc func showTextFields() {
-        let alert = UIAlertController(title: "Error", message: "Повторите ввод", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default) { _ in
-        }
-        alert.addAction(action)
+    private func showAlertController(message: String) {
+        let alert = UIAlertController(title: "Ошибка",
+                                      message: message,
+                                      preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
         present(alert, animated: true)
-        self.passwordTextField.text = ""
-        self.loginTextField.text = ""
-        self.passwordTextField.isSecureTextEntry = true
     }
 }

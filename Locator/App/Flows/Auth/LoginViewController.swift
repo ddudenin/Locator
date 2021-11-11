@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class LoginViewController: UIViewController {
     
@@ -22,19 +23,36 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let guestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(labelClicked(_:)))
-        recoveryLabel.addGestureRecognizer(guestureRecognizer)
-        recoveryLabel.isUserInteractionEnabled = true
+        configureRecoveryLabel()
     }
     
-    @IBAction func login(_ sender: Any) {
+    @IBAction private func login(_ sender: Any) {
         guard
             let login = loginTextField.text,
-            let password = passwordTextField.text//,
-                //let user = try? userRepository.compareUserData(login: login, password: password),
-                //!user.isEmpty
+            let password = passwordTextField.text
         else {
-            showTextFields()
+            showAlertController(message: "Не удалось прочитать данные пользователя")
+            return
+        }
+        
+        guard
+            !login.isEmpty,
+            !password.isEmpty
+        else {
+            showAlertController(message: "Введены не все данные")
+            return
+        }
+        
+        let users: Results<User>? = RealmManager
+            .shared?
+            .getObjects()
+            .filter("login = %@ AND password = %@", login, password)
+        
+        guard
+            let user = users,
+            !user.isEmpty
+        else {
+            showAlertController(message: "Данный пользователь не зарегистрирован")
             return
         }
         
@@ -42,24 +60,28 @@ class LoginViewController: UIViewController {
         onLogin?()
     }
     
-    @objc func labelClicked(_ sender: Any) {
-        onRecover?()
-        print("UILabel clicked")
-    }
-    
-    @IBAction func registration(_ sender: Any) {
+    @IBAction private func registration(_ sender: Any) {
         onRegistration?()
     }
     
-    @objc func showTextFields() {
-        let alert = UIAlertController(title: "Error", message: "Повторите ввод", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default) { _ in
-            self.passwordTextField.text = ""
-            self.loginTextField.text = ""
-            self.passwordTextField.isSecureTextEntry = true
-        }
-        alert.addAction(action)
-        present(alert, animated: true)
+    private func showAlertController(message: String) {
+        let alert = UIAlertController(title: "Ошибка",
+                                      message: message,
+                                      preferredStyle: .alert)
         
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
+        present(alert, animated: true)
+    }
+    
+    private func configureRecoveryLabel() {
+        let guestureRecognizer = UITapGestureRecognizer(target: self,
+                                                        action: #selector(recoveryLabelClicked(_:)))
+        recoveryLabel.addGestureRecognizer(guestureRecognizer)
+        recoveryLabel.isUserInteractionEnabled = true
+    }
+    
+    @objc func recoveryLabelClicked(_ sender: Any) {
+        onRecover?()
     }
 }
