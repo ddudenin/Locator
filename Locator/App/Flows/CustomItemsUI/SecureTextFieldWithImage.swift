@@ -28,6 +28,9 @@ class SecureTextFieldWithImage: TextFieldWithImage {
     // MARK: - Inits
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.autocorrectionType = .no
+        
         setupRightView()
     }
     
