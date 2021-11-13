@@ -12,7 +12,7 @@ import RealmSwift
 class MapViewController: UIViewController {
     
     // MARK: - Subviews
-    @IBOutlet weak var mapView: GMSMapView!
+    @IBOutlet private weak var mapView: GMSMapView!
     
     // MARK: - Private properties
     private var locationManager = CLLocationManager()
@@ -72,19 +72,24 @@ class MapViewController: UIViewController {
             return
         }
         
-        try? RealmManager.shared?.deleteAll()
-        var points : [MapPoint] = []
-        
-        for index in 0..<routePath.count() {
-            let coordinate = routePath.coordinate(at: index)
-            let point = MapPoint()
-            point.id = Int(index)
-            point.latitude = coordinate.latitude
-            point.longitude = coordinate.longitude
-            points.append(point)
+        do {
+            try RealmManager.shared?.deleteAll()
+            var points : [MapPoint] = []
+            
+            for index in 0..<routePath.count() {
+                let coordinate = routePath.coordinate(at: index)
+                let point = MapPoint()
+                point.id = Int(index)
+                point.latitude = coordinate.latitude
+                point.longitude = coordinate.longitude
+                points.append(point)
+            }
+            
+            try RealmManager.shared?.add(objects: points)
+        } catch {
+            print(error.localizedDescription)
         }
-        
-        try? RealmManager.shared?.add(objects: points)
+
     }
     
     private func loadRouteFromRealm() {
