@@ -32,37 +32,52 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybrid" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yGb-Bi-pVr">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zcT-Ps-oe9" customClass="GMSMapView">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                            </mapView>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nML-un-dBq"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="nML-un-dBq" firstAttribute="bottom" secondItem="yGb-Bi-pVr" secondAttribute="bottom" id="8da-k0-jvc"/>
-                            <constraint firstItem="nML-un-dBq" firstAttribute="trailing" secondItem="yGb-Bi-pVr" secondAttribute="trailing" id="ZUb-ws-dEu"/>
-                            <constraint firstItem="yGb-Bi-pVr" firstAttribute="leading" secondItem="nML-un-dBq" secondAttribute="leading" id="jfO-rc-c6q"/>
-                            <constraint firstItem="yGb-Bi-pVr" firstAttribute="top" secondItem="nML-un-dBq" secondAttribute="top" id="z60-ee-TMH"/>
+                            <constraint firstItem="zcT-Ps-oe9" firstAttribute="leading" secondItem="nML-un-dBq" secondAttribute="leading" id="0Wj-Ob-OLH"/>
+                            <constraint firstItem="nML-un-dBq" firstAttribute="trailing" secondItem="zcT-Ps-oe9" secondAttribute="trailing" id="ey3-yB-AW8"/>
+                            <constraint firstItem="nML-un-dBq" firstAttribute="bottom" secondItem="zcT-Ps-oe9" secondAttribute="bottom" id="ggY-bm-wqk"/>
+                            <constraint firstItem="zcT-Ps-oe9" firstAttribute="top" secondItem="nML-un-dBq" secondAttribute="top" id="uR1-LX-0y0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Locator" id="tmx-Gc-hoZ">
-                        <barButtonItem key="rightBarButtonItem" image="bookmark.circle" catalog="system" id="xwX-Ad-Bod">
+                        <barButtonItem key="leftBarButtonItem" image="map.fill" catalog="system" id="Y6c-CG-p5n">
                             <connections>
-                                <action selector="currentLocationButtonHandler:" destination="qgz-v5-bha" id="vb6-lH-14P"/>
+                                <action selector="showLastRouteButton:" destination="qgz-v5-bha" id="uEN-4e-Omw"/>
                             </connections>
                         </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem image="stop.circle.fill" catalog="system" id="UDa-ni-JVb">
+                                <connections>
+                                    <action selector="stopRecordingButtonHandler:" destination="qgz-v5-bha" id="Oi5-kX-zrW"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" image="play.square.fill" catalog="system" id="rr7-Xi-sGH">
+                                <connections>
+                                    <action selector="startRecordingButtonHandler:" destination="qgz-v5-bha" id="iH8-Yu-7kE"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
-                        <outlet property="mapView" destination="yGb-Bi-pVr" id="Sbl-AD-CK1"/>
+                        <outlet property="mapView" destination="zcT-Ps-oe9" id="MZc-bH-bGL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Po5-VT-EBV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="87" y="19"/>
+            <point key="canvasLocation" x="86.956521739130437" y="18.75"/>
         </scene>
     </scenes>
     <resources>
-        <image name="bookmark.circle" catalog="system" width="128" height="121"/>
+        <image name="map.fill" catalog="system" width="128" height="110"/>
+        <image name="play.square.fill" catalog="system" width="128" height="114"/>
+        <image name="stop.circle.fill" catalog="system" width="128" height="121"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

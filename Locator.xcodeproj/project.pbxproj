@@ -13,6 +13,9 @@
 		0A6A894B273191B800658A1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A6A894A273191B800658A1C /* Assets.xcassets */; };
 		0A6A894E273191B800658A1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A6A894C273191B800658A1C /* LaunchScreen.storyboard */; };
 		0A6A8956273193B900658A1C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6A8955273193B900658A1C /* MapViewController.swift */; };
+		0AC8012E2737EAC200E86FD6 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8012D2737EAC200E86FD6 /* RealmManager.swift */; };
+		0AC801302737F1A200E86FD6 /* MapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8012F2737F1A200E86FD6 /* MapPoint.swift */; };
+		D5FDEBA9D4603AD4D897489E /* Pods_Locator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5003446F3D35F3763D48D31 /* Pods_Locator.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +27,11 @@
 		0A6A894D273191B800658A1C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A6A894F273191B800658A1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A6A8955273193B900658A1C /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		0AC8012D2737EAC200E86FD6 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
+		0AC8012F2737F1A200E86FD6 /* MapPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPoint.swift; sourceTree = "<group>"; };
+		344D872D467F0C71E39DBAB7 /* Pods-Locator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locator.release.xcconfig"; path = "Target Support Files/Pods-Locator/Pods-Locator.release.xcconfig"; sourceTree = "<group>"; };
+		B5003446F3D35F3763D48D31 /* Pods_Locator.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Locator.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F07CB186111B8CE12529DBB4 /* Pods-Locator.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locator.debug.xcconfig"; path = "Target Support Files/Pods-Locator/Pods-Locator.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5FDEBA9D4603AD4D897489E /* Pods_Locator.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +51,8 @@
 			children = (
 				0A6A8940273191B700658A1C /* Locator */,
 				0A6A893F273191B700658A1C /* Products */,
+				AD05F57389BEFB26FBFF761C /* Pods */,
+				2BF1A0DF24B0C23063BF7CA9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -59,12 +70,31 @@
 				0A6A8941273191B700658A1C /* AppDelegate.swift */,
 				0A6A8943273191B700658A1C /* SceneDelegate.swift */,
 				0A6A8955273193B900658A1C /* MapViewController.swift */,
+				0AC8012D2737EAC200E86FD6 /* RealmManager.swift */,
 				0A6A8947273191B700658A1C /* Main.storyboard */,
 				0A6A894A273191B800658A1C /* Assets.xcassets */,
 				0A6A894C273191B800658A1C /* LaunchScreen.storyboard */,
 				0A6A894F273191B800658A1C /* Info.plist */,
+				0AC8012F2737F1A200E86FD6 /* MapPoint.swift */,
 			);
 			path = Locator;
+			sourceTree = "<group>";
+		};
+		2BF1A0DF24B0C23063BF7CA9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B5003446F3D35F3763D48D31 /* Pods_Locator.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD05F57389BEFB26FBFF761C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F07CB186111B8CE12529DBB4 /* Pods-Locator.debug.xcconfig */,
+				344D872D467F0C71E39DBAB7 /* Pods-Locator.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +104,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0A6A8952273191B800658A1C /* Build configuration list for PBXNativeTarget "Locator" */;
 			buildPhases = (
+				DDA41B5F1DB4742B2395F7E0 /* [CP] Check Pods Manifest.lock */,
 				0A6A893A273191B700658A1C /* Sources */,
 				0A6A893B273191B700658A1C /* Frameworks */,
 				0A6A893C273191B700658A1C /* Resources */,
+				6AB70AF54A32B7006F160A6E /* [CP] Embed Pods Frameworks */,
+				4C64793C8DBE85F074693679 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -133,12 +166,73 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4C64793C8DBE85F074693679 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locator/Pods-Locator-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locator/Pods-Locator-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locator/Pods-Locator-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6AB70AF54A32B7006F160A6E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locator/Pods-Locator-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Locator/Pods-Locator-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Locator/Pods-Locator-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DDA41B5F1DB4742B2395F7E0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Locator-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		0A6A893A273191B700658A1C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				0A6A8942273191B700658A1C /* AppDelegate.swift in Sources */,
+				0AC8012E2737EAC200E86FD6 /* RealmManager.swift in Sources */,
+				0AC801302737F1A200E86FD6 /* MapPoint.swift in Sources */,
 				0A6A8956273193B900658A1C /* MapViewController.swift in Sources */,
 				0A6A8944273191B700658A1C /* SceneDelegate.swift in Sources */,
 			);
@@ -284,6 +378,7 @@
 		};
 		0A6A8953273191B800658A1C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F07CB186111B8CE12529DBB4 /* Pods-Locator.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -292,6 +387,8 @@
 				DEVELOPMENT_TEAM = SN53JF86L5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Locator/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app will use the location data";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app will use the location data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -312,6 +409,7 @@
 		};
 		0A6A8954273191B800658A1C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 344D872D467F0C71E39DBAB7 /* Pods-Locator.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -320,6 +418,8 @@
 				DEVELOPMENT_TEAM = SN53JF86L5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Locator/Info.plist;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "The app will use the location data";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app will use the location data";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
