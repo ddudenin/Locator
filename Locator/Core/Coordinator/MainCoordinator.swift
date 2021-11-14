@@ -8,36 +8,36 @@
 import UIKit
 
 final class MainCoordinator: BaseCoordinator {
-    
+
     var rootController: UINavigationController?
     var onFinishFlow: (() -> Void)?
-    
+
     override func start() {
-        showMainModule()
+        showMenuModule()
     }
-    
-    private func showMainModule() {
+
+    private func showMenuModule() {
         let controller = UIStoryboard(name: "Main", bundle: nil)
-            .instantiateViewController(MainViewController.self)
-        
+            .instantiateViewController(MenuViewController.self)
+
         controller.onMap = { [weak self] in
             self?.showMapModule()
         }
-        
+
         controller.onLogout = { [weak self] in
             self?.onFinishFlow?()
         }
-        
+
         let rootController = UINavigationController(rootViewController: controller)
         setAsRoot(rootController)
         self.rootController = rootController
     }
-    
+
     private func showMapModule() {
         let controller = UIStoryboard(name: "Main", bundle: nil)
             .instantiateViewController(MapViewController.self)
-        
+
         rootController?.pushViewController(controller, animated: true)
     }
-    
+
 }
