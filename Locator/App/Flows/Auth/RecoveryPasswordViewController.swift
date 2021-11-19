@@ -10,10 +10,10 @@ import UIKit
 import UIKit
 
 class RecoveryPasswordViewController: UIViewController {
-    
+
     @IBOutlet private weak var loginTextField: UITextField!
-    
+
     @IBAction private func recoveryPasswordButtonHandler(_ sender: Any) {
- 
+
     }
 }

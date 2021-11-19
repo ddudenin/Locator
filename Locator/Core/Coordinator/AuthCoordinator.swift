@@ -47,7 +47,7 @@ final class AuthCoordinator: BaseCoordinator {
         let controller = UIStoryboard(name: "Auth", bundle: nil)
             .instantiateViewController(SignUpViewController.self)
         rootController?.pushViewController(controller, animated: true)
-        
+
         controller.onLogin = { [weak self] in
             self?.onFinishFlow?()
         }
