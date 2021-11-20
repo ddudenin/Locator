@@ -8,4 +8,6 @@ target 'Locator' do
   # Pods for Locator
   pod 'GoogleMaps', '~> 5.2'
   pod 'RealmSwift', '~> 10.19'
+  pod 'RxSwift', '~> 6.2'
+  pod 'RxCocoa', '~> 6.2'
 end

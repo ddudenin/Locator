@@ -21,7 +21,8 @@ class SecureTextFieldWithImage: TextFieldWithImage {
         button.addTarget(self,
                          action: #selector(toggleRightView(_:)),
                          for: .touchUpInside)
-        button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -15, bottom: 0, right: 0)
+        
+
         return button
     }()
 

@@ -26,6 +26,7 @@
 		0A6A894B273191B800658A1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A6A894A273191B800658A1C /* Assets.xcassets */; };
 		0A6A894E273191B800658A1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A6A894C273191B800658A1C /* LaunchScreen.storyboard */; };
 		0A6A8956273193B900658A1C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A6A8955273193B900658A1C /* MapViewController.swift */; };
+		0A8015142743E6EE00FECA1E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8015132743E6EE00FECA1E /* LocationManager.swift */; };
 		0AC8012E2737EAC200E86FD6 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8012D2737EAC200E86FD6 /* RealmManager.swift */; };
 		0AC801302737F1A200E86FD6 /* MapPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC8012F2737F1A200E86FD6 /* MapPoint.swift */; };
 		D5FDEBA9D4603AD4D897489E /* Pods_Locator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5003446F3D35F3763D48D31 /* Pods_Locator.framework */; };
@@ -53,6 +54,7 @@
 		0A6A894D273191B800658A1C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0A6A894F273191B800658A1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A6A8955273193B900658A1C /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		0A8015132743E6EE00FECA1E /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		0AC8012D2737EAC200E86FD6 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		0AC8012F2737F1A200E86FD6 /* MapPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPoint.swift; sourceTree = "<group>"; };
 		344D872D467F0C71E39DBAB7 /* Pods-Locator.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Locator.release.xcconfig"; path = "Target Support Files/Pods-Locator/Pods-Locator.release.xcconfig"; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				0A67F204273C5BD00091342B /* Coordinator */,
 				0AC8012D2737EAC200E86FD6 /* RealmManager.swift */,
 				0A67F212273C62900091342B /* StoryboardIdentifiable.swift */,
+				0A8015132743E6EE00FECA1E /* LocationManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 				0A67F226273C69240091342B /* SecureTextFieldWithImage.swift in Sources */,
 				0AC801302737F1A200E86FD6 /* MapPoint.swift in Sources */,
 				0A67F208273C5C310091342B /* ApplicationCoordinator.swift in Sources */,
+				0A8015142743E6EE00FECA1E /* LocationManager.swift in Sources */,
 				0A67F21B273C64060091342B /* MenuViewController.swift in Sources */,
 				0A67F213273C62900091342B /* StoryboardIdentifiable.swift in Sources */,
 				0A67F221273C65660091342B /* SignUpViewController.swift in Sources */,
