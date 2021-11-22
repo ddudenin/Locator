@@ -41,6 +41,10 @@ final class AuthCoordinator: BaseCoordinator {
         let controller = UIStoryboard(name: "Auth", bundle: nil)
             .instantiateViewController(RecoveryPasswordViewController.self)
         rootController?.pushViewController(controller, animated: true)
+        
+        controller.onRecover = { [weak self] in
+            self?.showLoginModule()
+        }
     }
 
     private func showSignUpModule() {
