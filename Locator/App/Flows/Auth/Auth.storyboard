@@ -214,19 +214,19 @@
     </scenes>
     <designables>
         <designable name="AZd-69-U4m">
-            <size key="intrinsicContentSize" width="90" height="34"/>
+            <size key="intrinsicContentSize" width="135" height="34"/>
         </designable>
         <designable name="Lne-Ls-RHZ">
-            <size key="intrinsicContentSize" width="90" height="34"/>
+            <size key="intrinsicContentSize" width="135" height="34"/>
         </designable>
         <designable name="Wgq-vo-pXS">
-            <size key="intrinsicContentSize" width="160" height="34"/>
+            <size key="intrinsicContentSize" width="190" height="34"/>
         </designable>
         <designable name="olJ-Bz-6ch">
-            <size key="intrinsicContentSize" width="59.5" height="34"/>
+            <size key="intrinsicContentSize" width="89.5" height="34"/>
         </designable>
         <designable name="s5h-xE-Nrf">
-            <size key="intrinsicContentSize" width="59.5" height="34"/>
+            <size key="intrinsicContentSize" width="89.5" height="34"/>
         </designable>
     </designables>
     <resources>

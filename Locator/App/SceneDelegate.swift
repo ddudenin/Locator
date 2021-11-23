@@ -47,6 +47,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         blurView.tag = -1
         blurView.frame = window.bounds
         self.window?.addSubview(blurView)
+        
+        NotificationManager.shared.makeReturnToAppNotification()
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A37D5C5274D556F00F03567 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A37D5C4274D556F00F03567 /* NotificationManager.swift */; };
 		0A67F1EC273C43FD0091342B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A67F1EB273C43FD0091342B /* User.swift */; };
 		0A67F1F6273C483A0091342B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A67F1F5273C483A0091342B /* LoginViewController.swift */; };
 		0A67F206273C5BDD0091342B /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A67F205273C5BDD0091342B /* BaseCoordinator.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0A37D5C4274D556F00F03567 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		0A67F1EB273C43FD0091342B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		0A67F1F5273C483A0091342B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0A67F205273C5BDD0091342B /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				0AC8012D2737EAC200E86FD6 /* RealmManager.swift */,
 				0A67F212273C62900091342B /* StoryboardIdentifiable.swift */,
 				0A8015132743E6EE00FECA1E /* LocationManager.swift */,
+				0A37D5C4274D556F00F03567 /* NotificationManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -368,6 +371,7 @@
 				0A67F21D273C64A50091342B /* RecoveryPasswordViewController.swift in Sources */,
 				0A67F225273C69240091342B /* TextFieldWithImage.swift in Sources */,
 				0A6A8956273193B900658A1C /* MapViewController.swift in Sources */,
+				0A37D5C5274D556F00F03567 /* NotificationManager.swift in Sources */,
 				0A67F219273C63BD0091342B /* MainCoordinator.swift in Sources */,
 				0A67F1F6273C483A0091342B /* LoginViewController.swift in Sources */,
 				0A6A8944273191B700658A1C /* SceneDelegate.swift in Sources */,
