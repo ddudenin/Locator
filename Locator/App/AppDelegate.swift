@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         GMSServices.provideAPIKey("AIzaSyC-H_cjXkoDEF3BFmcmvDxU-kpr9FKOGJA")
-
+        NotificationManager.shared.configureNotificationManager()
         return true
     }
 
