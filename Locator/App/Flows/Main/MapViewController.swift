@@ -21,6 +21,8 @@ class MapViewController: UIViewController {
     private var routePath: GMSMutablePath?
     
     private let mapZoom: Float = 17
+    private var markerImage : UIImage?
+    private let markerImageKey : String = "markerImage"
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -28,6 +30,7 @@ class MapViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         configureMap()
+        loadMarkerImage()
     }
     
     // MARK: - Private methods
@@ -103,6 +106,7 @@ class MapViewController: UIViewController {
     private func addMarker(coordinate: CLLocationCoordinate2D) {
         let marker = GMSMarker(position: coordinate)
         marker.map = self.mapView
+        marker.icon = self.markerImage
     }
     
     private func showAlertController() {
@@ -138,7 +142,7 @@ class MapViewController: UIViewController {
         saveRouteToRealm()
     }
     
-    @IBAction private func showLastRouteButton(_ sender: Any) {
+    @IBAction private func showLastRouteButtonHandler(_ sender: Any) {
         guard !self.locationManager.isTracking else {
             showAlertController()
             return
@@ -156,6 +160,26 @@ class MapViewController: UIViewController {
                                                        withPadding: CGFloat(self.mapZoom)))
     }
     
+    
+    @IBAction func takePictureButtonHandler(_ sender: Any) {
+        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
+        
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+        
+        present(imagePickerController, animated: true)
+    }
+    
+    private func loadMarkerImage() {
+        DispatchQueue.global(qos: .background).async {
+            if let imageData = UserDefaults.standard.object(forKey: self.markerImageKey) as? Data,
+               let image = UIImage(data: imageData) {
+                self.markerImage = image
+            }
+        }
+    }
 }
 
 // MARK: - MapViewController + CLLocationManagerDelegate
@@ -178,5 +202,39 @@ extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Failed with \(error.localizedDescription)")
+    }
+}
+
+extension MapViewController:  UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = extractImage(from: info) else { return }
+        
+        let markerImageScale = 85
+        
+        markerImage = image.scalePreservingAspectRatio(targetSize: CGSize(width: markerImageScale,
+                                                                          height: markerImageScale))
+        
+        DispatchQueue.global(qos: .background).async {
+            if let pngRepresentation = self.markerImage?.pngData() {
+                UserDefaults.standard.set(pngRepresentation, forKey: self.markerImageKey)
+            }
+        }
+        
+        picker.dismiss(animated: true)
+    }
+    
+    private func extractImage(from info: [UIImagePickerController.InfoKey : Any]) -> UIImage? {
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            return image
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            return image
+        } else {
+            return nil
+        }
     }
 }

@@ -76,18 +76,25 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Locator" id="tmx-Gc-hoZ">
-                        <barButtonItem key="leftBarButtonItem" image="map.fill" catalog="system" id="Y6c-CG-p5n">
-                            <connections>
-                                <action selector="showLastRouteButton:" destination="qgz-v5-bha" id="uEN-4e-Omw"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem image="map.fill" catalog="system" id="Y6c-CG-p5n">
+                                <connections>
+                                    <action selector="showLastRouteButtonHandler:" destination="qgz-v5-bha" id="fuY-p7-2oG"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="camera.circle" catalog="system" id="nQF-sB-Vd1">
+                                <connections>
+                                    <action selector="takePictureButtonHandler:" destination="qgz-v5-bha" id="D4U-Mv-hdx"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem image="stop.circle.fill" catalog="system" id="UDa-ni-JVb">
                                 <connections>
                                     <action selector="stopRecordingButtonHandler:" destination="qgz-v5-bha" id="Oi5-kX-zrW"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Item" image="play.square.fill" catalog="system" id="rr7-Xi-sGH">
+                            <barButtonItem image="play.square.fill" catalog="system" id="rr7-Xi-sGH">
                                 <connections>
                                     <action selector="startRecordingButtonHandler:" destination="qgz-v5-bha" id="iH8-Yu-7kE"/>
                                 </connections>
@@ -104,6 +111,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="camera.circle" catalog="system" width="128" height="121"/>
         <image name="map.circle" catalog="system" width="128" height="121"/>
         <image name="map.fill" catalog="system" width="128" height="110"/>
         <image name="person.crop.circle.badge.xmark" catalog="system" width="128" height="113"/>
